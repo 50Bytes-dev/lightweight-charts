@@ -59,9 +59,9 @@
     "eslint-plugin-markdown": "~2.2.1",
     "eslint-plugin-mdx": "~1.16.0",
     "eslint-plugin-prefer-arrow": "~1.2.1",
-    "eslint-plugin-tsdoc": "~0.2.14",
-    "eslint-plugin-unicorn": "~40.1.0",
     "eslint-plugin-react": "~7.28.0",
+    "eslint-plugin-tsdoc": "~0.2.14",
+    "eslint-plugin-unicorn": "~37.0.1",
     "express": "~4.17.2",
     "glob": "~7.2.0",
     "markdown-it": "~12.3.2",
@@ -108,6 +108,7 @@
     "prepare-release": "npm-run-all clean build:release && node ./scripts/clean-package-json.js",
     "size-limit": "size-limit",
     "verify": "npm-run-all clean -p lint check-markdown-links build:prod -p check-dts-docs tsc-verify test size-limit",
-    "test": "mocha tests/unittests/**/*.spec.ts"
+    "test": "mocha tests/unittests/**/*.spec.ts",
+    "prepare": "npm run build:prod"
   }
 }
