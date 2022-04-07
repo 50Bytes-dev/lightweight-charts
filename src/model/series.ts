@@ -230,7 +230,7 @@ export class Series<T extends SeriesType = SeriesType> extends PriceDataSource i
 			this.model().fullUpdate();
 		}
 
-		if (options.pane && previousPaneIndex !== options.pane) {
+		if (options.pane !== undefined && previousPaneIndex !== options.pane) {
 			this.model().moveSeriesToPane(this, previousPaneIndex, options.pane);
 		}
 
