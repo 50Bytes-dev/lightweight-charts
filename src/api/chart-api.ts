@@ -145,7 +145,7 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 		this._chartWidget.paneResized().subscribe(
 			(paramSupplier: PaneEventParamsImplSupplier) => {
 				if (this._paneResizeDelegate.hasListeners()) {
-					this._paneResizeDelegate.fire(this._convertPaneResizeParams(paramSupplier()));
+					this._paneResizeDelegate.fire(ChartApi._convertPaneResizeParams(paramSupplier()));
 				}
 			},
 			this
@@ -365,7 +365,7 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 		};
 	}
 
-	private _convertPaneResizeParams(param: PaneEventParamsImpl): PaneEventParams {
+	private static _convertPaneResizeParams(param: PaneEventParamsImpl): PaneEventParams {
 		return {
 			top: {
 				index: param.top.index,
