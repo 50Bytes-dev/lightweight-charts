@@ -7,6 +7,7 @@ import { SeriesMarkerShape } from '../model/series-markers';
 import { TextWidthCache } from '../model/text-width-cache';
 import { SeriesItemsIndexesRange, TimedValue } from '../model/time-data';
 
+import { drawVerticalLine, LineStyle, setLineStyle } from './draw-line';
 import { ScaledRenderer } from './scaled-renderer';
 import { drawArrow, hitTestArrow } from './series-markers-arrow';
 import { drawCircle, hitTestCircle } from './series-markers-circle';
@@ -27,6 +28,7 @@ export interface SeriesMarkerRendererDataItem extends TimedValue {
 	color: string;
 	internalId: number;
 	externalId?: string;
+	lineStyle: LineStyle;
 	text?: SeriesMarkerText;
 }
 
@@ -120,6 +122,11 @@ function drawShape(item: SeriesMarkerRendererDataItem, ctx: CanvasRenderingConte
 		case 'square':
 			drawSquare(ctx, item.x, item.y, item.size);
 			return;
+		case 'verticalLine':
+			ctx.strokeStyle = item.color;
+			setLineStyle(ctx, item.lineStyle);
+			drawVerticalLine(ctx, item.x, 10000, 0);
+			return;
 	}
 
 	ensureNever(item.shape);
@@ -147,5 +154,7 @@ function hitTestShape(item: SeriesMarkerRendererDataItem, x: Coordinate, y: Coor
 			return hitTestCircle(item.x, item.y, item.size, x, y);
 		case 'square':
 			return hitTestSquare(item.x, item.y, item.size, x, y);
+		case 'verticalLine':
+			return false;
 	}
 }

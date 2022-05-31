@@ -1,3 +1,5 @@
+import { LineStyle } from '../renderers/draw-line';
+
 import { OriginalTime } from './time-data';
 
 /**
@@ -8,7 +10,7 @@ export type SeriesMarkerPosition = 'aboveBar' | 'belowBar' | 'inBar';
 /**
  * Represents the shape of a series marker.
  */
-export type SeriesMarkerShape = 'circle' | 'square' | 'arrowUp' | 'arrowDown';
+export type SeriesMarkerShape = 'circle' | 'square' | 'arrowUp' | 'arrowDown' | 'verticalLine';
 
 /**
  * Represents a series marker.
@@ -44,6 +46,8 @@ export interface SeriesMarker<TimeType> {
 	 * @defaultValue `1`
 	 */
 	size?: number;
+
+	lineStyle?: LineStyle;
 
 	/**
 	 * @internal

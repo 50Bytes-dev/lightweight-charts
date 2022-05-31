@@ -11,16 +11,14 @@ import { Series } from '../../model/series';
 import { InternalSeriesMarker } from '../../model/series-markers';
 import { TimePointIndex, visibleTimedValues } from '../../model/time-data';
 import { TimeScale } from '../../model/time-scale';
+import { LineStyle } from '../../renderers/draw-line';
 import { IPaneRenderer } from '../../renderers/ipane-renderer';
 import {
 	SeriesMarkerRendererData,
 	SeriesMarkerRendererDataItem,
 	SeriesMarkersRenderer,
 } from '../../renderers/series-markers-renderer';
-import {
-	calculateShapeHeight,
-	shapeMargin as calculateShapeMargin,
-} from '../../renderers/series-markers-utils';
+import { calculateShapeHeight, shapeMargin as calculateShapeMargin } from '../../renderers/series-markers-utils';
 
 import { IUpdatablePaneView, UpdateType } from './iupdatable-pane-view';
 
@@ -165,6 +163,7 @@ export class SeriesMarkersPaneView implements IUpdatablePaneView {
 				internalId: marker.internalId,
 				externalId: marker.id,
 				text: undefined,
+				lineStyle: LineStyle.Solid,
 			}));
 			this._dataInvalidated = false;
 		}
