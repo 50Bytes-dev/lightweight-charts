@@ -102,7 +102,7 @@
     "rollup": "rollup -c rollup.config.js",
     "rollup-watch": "npm run rollup -- --watch",
     "build": "npm-run-all tsc rollup bundle-dts",
-    "build:watch": "npm-run-all tsc -p tsc-watch rollup-watch",
+    "build:watch": "cross-env NODE_ENV=production npm-run-all tsc -p tsc-watch rollup-watch",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "build:release": "cross-env BUILD_TAG=release npm run build:prod",
     "prepare-release": "npm-run-all clean build:release && node ./scripts/clean-package-json.js",

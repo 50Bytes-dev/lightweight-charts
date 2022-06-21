@@ -163,7 +163,7 @@ export class SeriesMarkersPaneView implements IUpdatablePaneView {
 				internalId: marker.internalId,
 				externalId: marker.id,
 				text: undefined,
-				lineStyle: LineStyle.Solid,
+				lineStyle: marker.lineStyle || LineStyle.Solid,
 			}));
 			this._dataInvalidated = false;
 		}
