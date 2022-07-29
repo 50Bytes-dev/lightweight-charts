@@ -5,7 +5,7 @@ import { LinePoint, LineStyle, LineType, LineWidth, setLineStyle } from './draw-
 import { ScaledRenderer } from './scaled-renderer';
 import { getControlPoints, walkLine } from './walk-line';
 
-export type LineItem = TimedValue & PricedValue & LinePoint & { color?: string };
+export type LineItem = TimedValue & PricedValue & LinePoint & { color?: string; background?: string };
 
 export interface PaneRendererLineDataBase {
 	lineType: LineType;
@@ -79,7 +79,7 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 		if (items.length === 0 || visibleRange === null) {
 			return;
 		}
-
+		// console.log('test 1', items);
 		ctx.beginPath();
 
 		const firstItem = items[visibleRange.from];
@@ -92,10 +92,11 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 			ctx.stroke();
 			ctx.beginPath();
 			ctx.strokeStyle = color;
+			ctx.fillStyle = color;
 			prevStrokeStyle = color;
 		};
 
-		for (let i = visibleRange.from + 1; i < visibleRange.to; ++i) {
+		for (let i = visibleRange.from; i < visibleRange.to; ++i) {
 			const currItem = items[i];
 			const currentStrokeStyle = currItem.color ?? lineColor;
 
@@ -118,6 +119,14 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 					ctx.bezierCurveTo(cp1.x, cp1.y, cp2.x, cp2.y, currItem.x, currItem.y);
 					break;
 				}
+			}
+
+			const nextItem = items[i + 1] ?? undefined;
+			// eslint-disable-next-line @typescript-eslint/tslint/config
+			if (currItem.background !== undefined && nextItem !== undefined) {
+				changeColor(currItem.background);
+				ctx.rect(currItem.x, 0, nextItem.x - currItem.x - 1, window.innerHeight);
+				ctx.fill();
 			}
 
 			if (lineType !== LineType.WithSteps && currentStrokeStyle !== prevStrokeStyle) {

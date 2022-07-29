@@ -20,6 +20,10 @@ function getColoredLineBasedSeriesPlotRow(time: TimePoint, index: TimePointIndex
 	if ('color' in item && item.color !== undefined) {
 		res.color = item.color;
 	}
+	// eslint-disable-next-line no-restricted-syntax
+	if ('background' in item && item.background !== undefined) {
+		res.background = item.background;
+	}
 
 	return res;
 }

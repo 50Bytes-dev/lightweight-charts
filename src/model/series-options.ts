@@ -152,6 +152,7 @@ export interface LineStyleOptions {
 	 * @defaultValue `'#2196f3'`
 	 */
 	color: string;
+	background: string;
 
 	/**
 	 * Line style.

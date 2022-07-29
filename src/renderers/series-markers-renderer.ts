@@ -125,7 +125,7 @@ function drawShape(item: SeriesMarkerRendererDataItem, ctx: CanvasRenderingConte
 		case 'verticalLine':
 			ctx.strokeStyle = item.color;
 			setLineStyle(ctx, item.lineStyle);
-			drawVerticalLine(ctx, item.x, 10000, 0);
+			drawVerticalLine(ctx, item.x, window.innerHeight, 0);
 			return;
 	}
 

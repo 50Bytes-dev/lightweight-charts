@@ -61,6 +61,10 @@ export const enum LineStyle {
 	 * A dottled line with more space between dots.
 	 */
 	SparseDotted = 4,
+	/**
+	 * A solid line with bigger width.
+	 */
+	SolidWide = 5,
 }
 
 export function setLineStyle(ctx: CanvasRenderingContext2D, style: LineStyle): void {
@@ -70,8 +74,11 @@ export function setLineStyle(ctx: CanvasRenderingContext2D, style: LineStyle): v
 		[LineStyle.Dashed]: [2 * ctx.lineWidth, 2 * ctx.lineWidth],
 		[LineStyle.LargeDashed]: [6 * ctx.lineWidth, 6 * ctx.lineWidth],
 		[LineStyle.SparseDotted]: [ctx.lineWidth, 4 * ctx.lineWidth],
+		[LineStyle.SolidWide]: [],
 	};
-
+	if (style === LineStyle.SolidWide) {
+		ctx.lineWidth = ctx.lineWidth * 16;
+	}
 	const dashPattern = dashPatterns[style];
 	ctx.setLineDash(dashPattern);
 }

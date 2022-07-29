@@ -70,6 +70,10 @@ export interface LineData extends SingleValueData {
 	 * Optional color value for certain data item. If missed, color from options is used
 	 */
 	color?: string;
+	/**
+	 * Optional background color value for certain data item. If missed, transparent background is used
+	 */
+	background?: string;
 }
 
 /**

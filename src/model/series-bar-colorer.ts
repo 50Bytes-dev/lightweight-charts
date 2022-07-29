@@ -22,6 +22,7 @@ export interface BarColorerStyle {
 	barColor: string;
 	barBorderColor: string; // Used in Candlesticks
 	barWickColor: string; // Used in Candlesticks
+	barBackground?: string;
 }
 
 const emptyResult: BarColorerStyle = {
@@ -128,10 +129,10 @@ export class SeriesBarColorer {
 
 	private _lineStyle(lineStyle: LineStyleOptions, barIndex: TimePointIndex, precomputedBars?: PrecomputedBars): BarColorerStyle {
 		const currentBar = ensureNotNull(this._findBar(barIndex, precomputedBars)) as SeriesPlotRow<'Line'>;
-
 		return {
 			...emptyResult,
 			barColor: currentBar.color ?? lineStyle.color,
+			barBackground: currentBar.background ?? 'transparent',
 		};
 	}
 

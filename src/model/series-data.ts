@@ -4,14 +4,17 @@ import { SeriesType } from './series-options';
 
 export interface LinePlotRow extends PlotRow {
 	readonly color?: string;
+	readonly background?: string;
 }
 
 export interface HistogramPlotRow extends PlotRow {
 	readonly color?: string;
+	readonly background?: string;
 }
 
 export interface BarPlotRow extends PlotRow {
 	readonly color?: string;
+	readonly background?: string;
 }
 
 export interface CandlestickPlotRow extends PlotRow {
