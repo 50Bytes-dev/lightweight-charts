@@ -74,6 +74,7 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 	/**
 	 * Similar to {@link walkLine}, but supports color changes
 	 */
+	// eslint-disable-next-line complexity
 	protected override _drawLine(ctx: CanvasRenderingContext2D, data: PaneRendererLineData): void {
 		const { items, visibleRange, lineType, lineColor } = data;
 		if (items.length === 0 || visibleRange === null) {
@@ -88,10 +89,18 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 		let prevStrokeStyle = firstItem.color ?? lineColor;
 		ctx.strokeStyle = prevStrokeStyle;
 
-		const changeColor = (color: string) => {
+		const changeStrokeColor = (color: string) => {
 			ctx.stroke();
 			ctx.beginPath();
 			ctx.strokeStyle = color;
+			ctx.fillStyle = 'transparent';
+			prevStrokeStyle = color;
+		};
+
+		const changeFillColor = (color: string) => {
+			ctx.stroke();
+			ctx.beginPath();
+			ctx.strokeStyle = 'transparent';
 			ctx.fillStyle = color;
 			prevStrokeStyle = color;
 		};
@@ -108,7 +117,7 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 					ctx.lineTo(currItem.x, items[i - 1].y);
 
 					if (currentStrokeStyle !== prevStrokeStyle) {
-						changeColor(currentStrokeStyle);
+						changeStrokeColor(currentStrokeStyle);
 						ctx.lineTo(currItem.x, items[i - 1].y);
 					}
 
@@ -124,13 +133,13 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 			const nextItem = items[i + 1] ?? undefined;
 			// eslint-disable-next-line @typescript-eslint/tslint/config
 			if (currItem.background !== undefined && nextItem !== undefined) {
-				changeColor(currItem.background);
-				ctx.rect(currItem.x, 0, nextItem.x - currItem.x - 1, window.innerHeight);
+				changeFillColor(currItem.background);
+				ctx.rect(currItem.x, 0, nextItem.x - currItem.x, window.innerHeight);
 				ctx.fill();
 			}
 
 			if (lineType !== LineType.WithSteps && currentStrokeStyle !== prevStrokeStyle) {
-				changeColor(currentStrokeStyle);
+				changeStrokeColor(currentStrokeStyle);
 				ctx.moveTo(currItem.x, currItem.y);
 			}
 		}
