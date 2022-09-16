@@ -77,7 +77,9 @@ export function setLineStyle(ctx: CanvasRenderingContext2D, style: LineStyle): v
 		[LineStyle.SolidWide]: [],
 	};
 	if (style === LineStyle.SolidWide) {
-		ctx.lineWidth = ctx.lineWidth * 16;
+		ctx.lineWidth = 8;
+	} else {
+		ctx.lineWidth = 1;
 	}
 	const dashPattern = dashPatterns[style];
 	ctx.setLineDash(dashPattern);
