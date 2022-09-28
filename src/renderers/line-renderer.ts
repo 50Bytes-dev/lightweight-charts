@@ -90,19 +90,15 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 		ctx.strokeStyle = prevStrokeStyle;
 
 		const changeStrokeColor = (color: string) => {
-			ctx.stroke();
-			ctx.beginPath();
 			ctx.strokeStyle = color;
 			ctx.fillStyle = 'transparent';
 			prevStrokeStyle = color;
 		};
 
 		const changeFillColor = (color: string) => {
-			ctx.stroke();
-			ctx.beginPath();
-			ctx.strokeStyle = 'transparent';
+			ctx.strokeStyle = 'blue';
 			ctx.fillStyle = color;
-			prevStrokeStyle = color;
+			prevStrokeStyle = 'red';
 		};
 
 		for (let i = visibleRange.from; i < visibleRange.to; ++i) {
@@ -133,12 +129,15 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 			const nextItem = items[i + 1] ?? undefined;
 			// eslint-disable-next-line @typescript-eslint/tslint/config
 			if (currItem.background !== undefined && nextItem !== undefined) {
+				ctx.stroke();
+				ctx.beginPath();
 				changeFillColor(currItem.background);
-				ctx.rect(currItem.x, 0, nextItem.x - currItem.x, window.innerHeight);
-				ctx.fill();
+				ctx.fillRect(currItem.x, 0, nextItem.x - currItem.x, window.innerHeight);
 			}
 
 			if (lineType !== LineType.WithSteps && currentStrokeStyle !== prevStrokeStyle) {
+				ctx.stroke();
+				ctx.beginPath();
 				changeStrokeColor(currentStrokeStyle);
 				ctx.moveTo(currItem.x, currItem.y);
 			}
