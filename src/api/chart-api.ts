@@ -113,6 +113,8 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 	private readonly _seriesMapReversed: Map<Series, SeriesApi<SeriesType>> = new Map();
 
 	private readonly _clickedDelegate: Delegate<MouseEventParams> = new Delegate();
+	private readonly _mouseDownDelegate: Delegate<MouseEventParams> = new Delegate();
+	private readonly _mouseUpDelegate: Delegate<MouseEventParams> = new Delegate();
 	private readonly _crosshairMovedDelegate: Delegate<MouseEventParams> = new Delegate();
 	private readonly _paneResizeDelegate: Delegate<PaneEventParams> = new Delegate();
 
@@ -129,6 +131,22 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 			(paramSupplier: MouseEventParamsImplSupplier) => {
 				if (this._clickedDelegate.hasListeners()) {
 					this._clickedDelegate.fire(this._convertMouseParams(paramSupplier()));
+				}
+			},
+			this
+		);
+		this._chartWidget.mouseDown().subscribe(
+			(paramSupplier: MouseEventParamsImplSupplier) => {
+				if (this._mouseDownDelegate.hasListeners()) {
+					this._mouseDownDelegate.fire(this._convertMouseParams(paramSupplier()));
+				}
+			},
+			this
+		);
+		this._chartWidget.mouseUp().subscribe(
+			(paramSupplier: MouseEventParamsImplSupplier) => {
+				if (this._mouseUpDelegate.hasListeners()) {
+					this._mouseUpDelegate.fire(this._convertMouseParams(paramSupplier()));
 				}
 			},
 			this
@@ -166,6 +184,8 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 		this._seriesMapReversed.clear();
 
 		this._clickedDelegate.destroy();
+		this._mouseDownDelegate.destroy();
+		this._mouseUpDelegate.destroy();
 		this._crosshairMovedDelegate.destroy();
 		this._dataLayer.destroy();
 	}
@@ -281,6 +301,22 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 
 	public unsubscribeClick(handler: MouseEventHandler): void {
 		this._clickedDelegate.unsubscribe(handler);
+	}
+
+	public subscribeMouseDown(handler: MouseEventHandler): void {
+		this._mouseDownDelegate.subscribe(handler);
+	}
+
+	public unsubscribeMouseDown(handler: MouseEventHandler): void {
+		this._mouseDownDelegate.unsubscribe(handler);
+	}
+
+	public subscribeMouseUp(handler: MouseEventHandler): void {
+		this._mouseUpDelegate.subscribe(handler);
+	}
+
+	public unsubscribeMouseUp(handler: MouseEventHandler): void {
+		this._mouseUpDelegate.subscribe(handler);
 	}
 
 	public subscribeCrosshairMove(handler: MouseEventHandler): void {

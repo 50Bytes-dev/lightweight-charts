@@ -208,6 +208,11 @@ export interface IChartApi {
 	 */
 	unsubscribeClick(handler: MouseEventHandler): void;
 
+	subscribeMouseDown(handler: MouseEventHandler): void;
+	unsubscribeMouseDown(handler: MouseEventHandler): void;
+	subscribeMouseUp(handler: MouseEventHandler): void;
+	unsubscribeMouseUp(handler: MouseEventHandler): void;
+
 	/**
 	 * Subscribe to the crosshair move event.
 	 *

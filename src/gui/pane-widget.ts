@@ -89,6 +89,8 @@ export class PaneWidget implements IDestroyable, MouseEventHandlers {
 	private _startScrollingPos: StartScrollPosition | null = null;
 	private _isScrolling: boolean = false;
 	private _clicked: Delegate<TimePointIndex | null, Point & PaneInfo> = new Delegate();
+	private _mouseDown: Delegate<TimePointIndex | null, Point & PaneInfo> = new Delegate();
+	private _mouseUp: Delegate<TimePointIndex | null, Point & PaneInfo> = new Delegate();
 	private _prevPinchScale: number = 0;
 	private _longTap: boolean = false;
 	private _startTrackPoint: Point | null = null;
@@ -255,6 +257,15 @@ export class PaneWidget implements IDestroyable, MouseEventHandlers {
 		this._onMouseEvent();
 		this._mouseTouchDownEvent();
 		this._setCrosshairPosition(event.localX, event.localY);
+
+		const x = event.localX;
+		const y = event.localY;
+
+		if (this._mouseDown.hasListeners()) {
+			const currentTime = this._model().crosshairSource().appliedIndex();
+			const paneIndex = this._model().getPaneIndex(ensureNotNull(this._state));
+			this._mouseDown.fire(currentTime, { x, y, paneIndex });
+		}
 	}
 
 	public mouseMoveEvent(event: MouseEventHandlerMouseEvent): void {
@@ -302,6 +313,15 @@ export class PaneWidget implements IDestroyable, MouseEventHandlers {
 		this._longTap = false;
 
 		this._endScroll(event);
+
+		const x = event.localX;
+		const y = event.localY;
+
+		if (this._mouseUp.hasListeners()) {
+			const currentTime = this._model().crosshairSource().appliedIndex();
+			const paneIndex = this._model().getPaneIndex(ensureNotNull(this._state));
+			this._mouseUp.fire(currentTime, { x, y, paneIndex });
+		}
 	}
 
 	public longTapEvent(event: MouseEventHandlerTouchEvent): void {
@@ -325,6 +345,14 @@ export class PaneWidget implements IDestroyable, MouseEventHandlers {
 
 	public clicked(): ISubscription<TimePointIndex | null, Point> {
 		return this._clicked;
+	}
+
+	public mouseDown(): ISubscription<TimePointIndex | null, Point> {
+		return this._mouseDown;
+	}
+
+	public mouseUp(): ISubscription<TimePointIndex | null, Point> {
+		return this._mouseUp;
 	}
 
 	public pinchStartEvent(): void {
