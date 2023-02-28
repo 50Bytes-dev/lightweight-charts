@@ -1,3 +1,4 @@
+import { Size } from '../gui/canvas-utils';
 import {
 	ChartWidget,
 	MouseEventParamsImpl,
@@ -9,6 +10,7 @@ import { PaneWidget } from '../gui/pane-widget';
 
 import { assert, ensureDefined } from '../helpers/assertions';
 import { Delegate } from '../helpers/delegate';
+import { clamp } from '../helpers/mathex';
 import { clone, DeepPartial, isBoolean, merge } from '../helpers/strict-type-checks';
 
 import { ChartOptions, ChartOptionsInternal } from '../model/chart-model';
@@ -39,7 +41,7 @@ import { CandlestickSeriesApi } from './candlestick-series-api';
 import { DataUpdatesConsumer, isFulfilledData, SeriesDataItemTypeMap } from './data-consumer';
 import { DataLayer, DataUpdateResponse, SeriesChanges } from './data-layer';
 import { getSeriesDataCreator } from './get-series-data-creator';
-import { IChartApi, MouseEventHandler, MouseEventParams, PaneEventHandler, PaneEventParams } from './ichart-api';
+import { IChartApi, ISize, MouseEventHandler, MouseEventParams, PaneEventHandler, PaneEventParams } from './ichart-api';
 import { IPriceScaleApi } from './iprice-scale-api';
 import { ISeriesApi } from './iseries-api';
 import { ITimeScaleApi } from './itime-scale-api';
@@ -357,6 +359,46 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 
 	public getPaneElements(): HTMLElement[] {
 		return this._chartWidget.paneWidgets().map((paneWidget: PaneWidget) => paneWidget.getPaneCell());
+	}
+
+	public setPaneHeight(index: number, height: number): void {
+		this._chartWidget.model().setPaneHeight(this._chartWidget.paneWidgets()[index]?.state(), height);
+	}
+
+	public setPaneSize(index: number, width: number, height: number): void {
+		const paneWidget = this._chartWidget.paneWidgets()[index];
+		paneWidget.setSize(new Size(width, height));
+		if (paneWidget.state()) {
+			this._chartWidget.model().setPaneHeight(paneWidget.state(), height);
+		}
+	}
+
+	public getPaneSize(index: number): ISize {
+		const size = this._chartWidget.paneWidgets()[index]?.getSize();
+		return {
+			width: size?.w,
+			height: size?.h,
+		};
+	}
+
+	public setPaneSeparator(height: number): void {
+		const paneA = this._chartWidget.paneWidgets()[0];
+		const paneB = this._chartWidget.paneWidgets()[1];
+		const totalStretch = paneA.stretchFactor() + paneB.stretchFactor();
+		const totalHeight = paneA.getSize().h + paneB.getSize().h;
+		const minPaneHeight = 30;
+		const maxPaneHeight = totalHeight + minPaneHeight;
+		const pixelStretchFactor = totalStretch / totalHeight;
+
+		const upperHeight = paneA.getSize().h;
+		const newUpperPaneHeight = clamp(upperHeight + height, minPaneHeight, maxPaneHeight);
+
+		const newUpperPaneStretch = newUpperPaneHeight * pixelStretchFactor;
+		const newLowerPaneStretch = totalStretch - newUpperPaneStretch;
+		paneA.setStretchFactor(newUpperPaneStretch);
+		paneB.setStretchFactor(newLowerPaneStretch);
+		this._chartWidget.adjustSize();
+		this._chartWidget.model().fullUpdate();
 	}
 
 	public subscribePaneResize(handler: PaneEventHandler): void {

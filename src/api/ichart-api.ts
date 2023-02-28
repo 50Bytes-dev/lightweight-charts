@@ -78,6 +78,10 @@ export interface PaneEventParams {
 
 export type PaneEventHandler = (param: PaneEventParams) => void;
 
+export interface ISize {
+	width: number;
+	height: number;
+}
 /**
  * The main interface of a single chart.
  */
@@ -309,4 +313,12 @@ export interface IChartApi {
 	swapPane(first: number, second: number): void;
 
 	getPaneElements(): HTMLElement[];
+
+	setPaneHeight(index: number, height: number): void;
+
+	setPaneSize(index: number, width: number, height: number): void;
+
+	getPaneSize(index: number): ISize;
+
+	setPaneSeparator(height: number): void;
 }
