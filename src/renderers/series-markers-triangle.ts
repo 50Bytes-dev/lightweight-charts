@@ -1,5 +1,3 @@
-import { ceiledOdd } from '../helpers/mathex';
-
 import { Coordinate } from '../model/coordinate';
 
 import { hitTestSquare } from './series-markers-square';
@@ -14,26 +12,16 @@ export function drawTriangle(
 ): void {
 	const triangleSize = shapeSize('triangleUp', size);
 	const halfTriangleSize = (triangleSize - 1) / 2;
-	const baseSize = ceiledOdd(size / 2);
-	const halfBaseSize = (baseSize - 1) / 2;
 
 	ctx.beginPath();
 	if (up) {
-		ctx.moveTo(centerX - halfTriangleSize, centerY);
-		ctx.lineTo(centerX, centerY - halfTriangleSize);
-		ctx.lineTo(centerX + halfTriangleSize, centerY);
-		ctx.lineTo(centerX + halfBaseSize, centerY);
-		ctx.lineTo(centerX + halfBaseSize, centerY + halfTriangleSize);
-		ctx.lineTo(centerX - halfBaseSize, centerY + halfTriangleSize);
-		ctx.lineTo(centerX - halfBaseSize, centerY);
+		ctx.moveTo(centerX, centerY - halfTriangleSize);
+		ctx.lineTo(centerX + halfTriangleSize, centerY + halfTriangleSize);
+		ctx.lineTo(centerX - halfTriangleSize, centerY + halfTriangleSize);
 	} else {
-		ctx.moveTo(centerX - halfTriangleSize, centerY);
-		ctx.lineTo(centerX, centerY + halfTriangleSize);
-		ctx.lineTo(centerX + halfTriangleSize, centerY);
-		ctx.lineTo(centerX + halfBaseSize, centerY);
-		ctx.lineTo(centerX + halfBaseSize, centerY - halfTriangleSize);
-		ctx.lineTo(centerX - halfBaseSize, centerY - halfTriangleSize);
-		ctx.lineTo(centerX - halfBaseSize, centerY);
+		ctx.moveTo(centerX, centerY + halfTriangleSize);
+		ctx.lineTo(centerX + halfTriangleSize, centerY - halfTriangleSize);
+		ctx.lineTo(centerX - halfTriangleSize, centerY - halfTriangleSize);
 	}
 
 	ctx.fill();

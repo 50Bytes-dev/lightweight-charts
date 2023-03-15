@@ -11,6 +11,7 @@ import { SeriesAreaPaneView } from '../views/pane/area-pane-view';
 import { SeriesBarsPaneView } from '../views/pane/bars-pane-view';
 import { SeriesBaselinePaneView } from '../views/pane/baseline-pane-view';
 import { SeriesCandlesticksPaneView } from '../views/pane/candlesticks-pane-view';
+import { SeriesDominatingPaneView } from '../views/pane/dominating-pane-view';
 import { SeriesHistogramPaneView } from '../views/pane/histogram-pane-view';
 import { IPaneView } from '../views/pane/ipane-view';
 import { IUpdatablePaneView } from '../views/pane/iupdatable-pane-view';
@@ -65,6 +66,7 @@ export interface LastValueDataResultWithData {
 	formattedPricePercentage: string;
 	color: string;
 	coordinate: Coordinate;
+	radius: number;
 	index: TimePointIndex;
 }
 
@@ -83,6 +85,7 @@ export interface SeriesDataAtTypeMap {
 	Area: BarPrice;
 	Baseline: BarPrice;
 	Line: BarPrice;
+	Dominating: BarPrices;
 	Histogram: BarPrice;
 }
 
@@ -185,6 +188,7 @@ export class Series<T extends SeriesType = SeriesType> extends PriceDataSource i
 		const barColorer = this.barColorer();
 		const style = barColorer.barStyle(lastIndex, { value: bar });
 		const coordinate = priceScale.priceToCoordinate(price, firstValue.value);
+		const radius = priceScale.options().labelBorderRadius;
 
 		return {
 			noData: false,
@@ -194,6 +198,7 @@ export class Series<T extends SeriesType = SeriesType> extends PriceDataSource i
 			formattedPricePercentage: priceScale.formatPricePercentage(price, firstValue.value),
 			color: style.barColor,
 			coordinate: coordinate,
+			radius: radius,
 			index: lastIndex,
 		};
 	}
@@ -335,7 +340,7 @@ export class Series<T extends SeriesType = SeriesType> extends PriceDataSource i
 		if (prices === null) {
 			return null;
 		}
-		if (this._seriesType === 'Bar' || this._seriesType === 'Candlestick') {
+		if (this._seriesType === 'Bar' || this._seriesType === 'Candlestick' || this._seriesType === 'Dominating') {
 			return {
 				open: prices.value[PlotRowValueIndex.Open] as BarPrice,
 				high: prices.value[PlotRowValueIndex.High] as BarPrice,
@@ -625,6 +630,11 @@ export class Series<T extends SeriesType = SeriesType> extends PriceDataSource i
 
 			case 'Baseline': {
 				this._paneView = new SeriesBaselinePaneView(this as Series<'Baseline'>, this.model());
+				break;
+			}
+
+			case 'Dominating': {
+				this._paneView = new SeriesDominatingPaneView(this as Series<'Dominating'>, this.model());
 				break;
 			}
 

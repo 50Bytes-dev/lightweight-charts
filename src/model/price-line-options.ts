@@ -41,6 +41,12 @@ export interface PriceLineOptions {
 	 */
 	axisLabelVisible: boolean;
 	/**
+	 * Rounds corners of the label.
+	 *
+	 * @defaultValue `0`
+	 */
+	axisLabelBorderRadius: number;
+	/**
 	 * Price line's on the chart pane.
 	 *
 	 * @defaultValue `''`

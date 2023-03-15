@@ -24,7 +24,7 @@ import {
 	BaselineSeriesOptions,
 	BaselineSeriesPartialOptions,
 	CandlestickSeriesOptions,
-	CandlestickSeriesPartialOptions,
+	CandlestickSeriesPartialOptions, DominatingSeriesOptions, DominatingSeriesPartialOptions,
 	fillUpDownCandlesticksColors,
 	HistogramSeriesOptions,
 	HistogramSeriesPartialOptions,
@@ -50,7 +50,7 @@ import {
 	areaStyleDefaults,
 	barStyleDefaults,
 	baselineStyleDefaults,
-	candlestickStyleDefaults,
+	candlestickStyleDefaults, dominatingStyleDefaults,
 	histogramStyleDefaults,
 	lineStyleDefaults,
 	seriesOptionsDefaults,
@@ -270,6 +270,19 @@ export class ChartApi implements IChartApi, DataUpdatesConsumer<SeriesType> {
 		const series = this._chartWidget.model().createSeries('Line', strictOptions);
 
 		const res = new SeriesApi<'Line'>(series, this, this);
+		this._seriesMap.set(res, series);
+		this._seriesMapReversed.set(series, res);
+
+		return res;
+	}
+
+	public addDominatingSeries(options: DominatingSeriesPartialOptions = {}): ISeriesApi<'Dominating'> {
+		patchPriceFormat(options.priceFormat);
+
+		const strictOptions = merge(clone(seriesOptionsDefaults), dominatingStyleDefaults, options) as DominatingSeriesOptions;
+		const series = this._chartWidget.model().createSeries('Dominating', strictOptions);
+
+		const res = new SeriesApi<'Dominating'>(series, this, this);
 		this._seriesMap.set(res, series);
 		this._seriesMapReversed.set(series, res);
 

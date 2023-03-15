@@ -87,6 +87,36 @@ export interface HistogramData extends SingleValueData {
 }
 
 /**
+ * Structure describing a single item of data for line series
+ */
+export interface DominatingData extends OhlcData {
+	/**
+	 * Optional color value for certain data item. If missed, color from options is used
+	 */
+	topColor?: string;
+	/**
+	 * Optional color value for certain data item. If missed, color from options is used
+	 */
+	middleColor?: string;
+	/**
+	 * Optional color value for certain data item. If missed, color from options is used
+	 */
+	bottomColor?: string;
+	/**
+	 * Optional background color value for certain data item. If missed, transparent background is used
+	 */
+	background?: string;
+	/**
+	 * Optional background color value for certain data item. If missed, transparent background is used
+	 */
+	topBackground?: string;
+	/**
+	 * Optional background color value for certain data item. If missed, transparent background is used
+	 */
+	bottomBackground?: string;
+}
+
+/**
  * Represents a bar with a {@link Time} and open, high, low, and close prices.
  */
 export interface OhlcData {
@@ -175,6 +205,10 @@ export interface SeriesDataItemTypeMap {
 	 * The types of line series data.
 	 */
 	Line: LineData | WhitespaceData;
+	/**
+	 * The types of line series data.
+	 */
+	Dominating: DominatingData | WhitespaceData;
 	/**
 	 * The types of histogram series data.
 	 */

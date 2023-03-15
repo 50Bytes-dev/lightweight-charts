@@ -7,7 +7,7 @@ import {
 	AreaStyleOptions,
 	BarStyleOptions,
 	BaselineStyleOptions,
-	CandlestickStyleOptions,
+	CandlestickStyleOptions, DominatingStyleOptions,
 	HistogramStyleOptions,
 	LineStyleOptions,
 } from './series-options';
@@ -60,6 +60,9 @@ export class SeriesBarColorer {
 			case 'Candlestick':
 				return this._candleStyle(seriesOptions as CandlestickStyleOptions, barIndex, precomputedBars);
 
+			case 'Dominating':
+				return this._dominatingStyle(seriesOptions as DominatingStyleOptions, barIndex, precomputedBars);
+
 			case 'Histogram':
 				return this._histogramStyle(seriesOptions as HistogramStyleOptions, barIndex, precomputedBars);
 		}
@@ -106,6 +109,21 @@ export class SeriesBarColorer {
 		result.barColor = currentBar.color ?? (isUp ? upColor : downColor);
 		result.barBorderColor = currentBar.borderColor ?? (isUp ? borderUpColor : borderDownColor);
 		result.barWickColor = currentBar.wickColor ?? (isUp ? wickUpColor : wickDownColor);
+
+		return result;
+	}
+
+	private _dominatingStyle(dominatingStyle: DominatingStyleOptions, barIndex: TimePointIndex, precomputedBars?: PrecomputedBars): BarColorerStyle {
+		const result: BarColorerStyle = { ...emptyResult };
+
+		const middleColor = dominatingStyle.middleColor;
+		const background = dominatingStyle.background;
+
+		const currentBar = ensureNotNull(this._findBar(barIndex, precomputedBars)) as SeriesPlotRow<'Dominating'>;
+
+		result.barColor = currentBar.topColor ?? middleColor;
+		result.barBorderColor = currentBar.background ?? background;
+		result.barWickColor = currentBar.background ?? background;
 
 		return result;
 	}

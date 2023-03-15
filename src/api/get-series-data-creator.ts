@@ -41,6 +41,7 @@ const seriesPlotRowToDataMap: SeriesPlotRowToDataMap = {
 	Histogram: histogramData,
 	Bar: barData,
 	Candlestick: barData,
+	Dominating: barData,
 };
 
 export function getSeriesDataCreator<TSeriesType extends SeriesType>(seriesType: TSeriesType): (plotRow: SeriesPlotRow<TSeriesType>) => SeriesDataItemTypeMap[TSeriesType] {

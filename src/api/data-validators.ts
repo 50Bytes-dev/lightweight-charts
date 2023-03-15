@@ -48,6 +48,7 @@ type Checker = (item: SeriesDataItemTypeMap[SeriesType]) => void;
 function getChecker(type: SeriesType): Checker {
 	switch (type) {
 		case 'Bar':
+		case 'Dominating':
 		case 'Candlestick':
 			return checkBarItem.bind(null, type);
 
@@ -59,7 +60,7 @@ function getChecker(type: SeriesType): Checker {
 	}
 }
 
-function checkBarItem(type: 'Bar' | 'Candlestick', barItem: SeriesDataItemTypeMap[typeof type]): void {
+function checkBarItem(type: 'Bar' | 'Candlestick' | 'Dominating', barItem: SeriesDataItemTypeMap[typeof type]): void {
 	if (!isFulfilledData(barItem)) {
 		return;
 	}

@@ -1,5 +1,6 @@
 import { ensureNotNull } from '../helpers/assertions';
 import { drawScaled } from '../helpers/canvas-helpers';
+import { roundRect } from '../helpers/rounded-rect';
 
 import { ITimeAxisViewRenderer, TimeAxisViewRendererOptions } from './itime-axis-view-renderer';
 
@@ -9,6 +10,7 @@ export interface TimeAxisViewRendererData {
 	coordinate: number;
 	color: string;
 	background: string;
+	radius: number;
 	visible: boolean;
 	tickVisible: boolean;
 }
@@ -72,7 +74,7 @@ export class TimeAxisViewRenderer implements ITimeAxisViewRenderer {
 		const y1scaled = Math.round(y1 * pixelRatio);
 		const x2scaled = Math.round(x2 * pixelRatio);
 		const y2scaled = Math.round(y2 * pixelRatio);
-		ctx.fillRect(x1scaled, y1scaled, x2scaled - x1scaled, y2scaled - y1scaled);
+		roundRect(ctx, x1scaled, y1scaled, x2scaled - x1scaled, y2scaled - y1scaled, this._data.radius || 0);
 
 		if (this._data.tickVisible) {
 			const tickX = Math.round(this._data.coordinate * pixelRatio);

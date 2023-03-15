@@ -3,6 +3,7 @@ import { LineWidth } from '../renderers/draw-line';
 
 export interface PriceAxisViewRendererCommonData {
 	activeBackground?: string;
+	radius: number;
 	background: string;
 	color: string;
 	coordinate: number;
@@ -11,6 +12,7 @@ export interface PriceAxisViewRendererCommonData {
 
 export interface PriceAxisViewRendererData {
 	visible: boolean;
+	background?: number;
 	text: string;
 	tickVisible: boolean;
 	moveTextToInvisibleTick: boolean;

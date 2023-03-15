@@ -1,4 +1,5 @@
 import { drawScaled } from '../helpers/canvas-helpers';
+import { roundRect } from '../helpers/rounded-rect';
 
 import { TextWidthCache } from '../model/text-width-cache';
 
@@ -95,7 +96,7 @@ export class PriceAxisViewRenderer implements IPriceAxisViewRenderer {
 
 			const tickHeight = Math.max(1, Math.floor(pixelRatio));
 
-			const horzBorderScaled = Math.max(1, Math.floor(horzBorder * pixelRatio));
+			// const horzBorderScaled = Math.max(1, Math.floor(horzBorder * pixelRatio));
 			const xInsideScaled = alignRight ? rightScaled : 0;
 			const yTopScaled = Math.round(yTop * pixelRatio);
 			const xOutsideScaled = Math.round(xOutside * pixelRatio);
@@ -106,16 +107,17 @@ export class PriceAxisViewRenderer implements IPriceAxisViewRenderer {
 
 			ctx.save();
 
-			ctx.beginPath();
-			ctx.moveTo(xInsideScaled, yTopScaled);
-			ctx.lineTo(xOutsideScaled, yTopScaled);
-			ctx.lineTo(xOutsideScaled, yBottomScaled);
-			ctx.lineTo(xInsideScaled, yBottomScaled);
-			ctx.fill();
+			// ctx.beginPath();
+			// ctx.moveTo(xInsideScaled, yTopScaled);
+			// ctx.lineTo(xOutsideScaled, yTopScaled);
+			// ctx.lineTo(xOutsideScaled, yBottomScaled);
+			// ctx.lineTo(xInsideScaled, yBottomScaled);
+			// ctx.fill();
+			roundRect(ctx, alignRight ? xOutsideScaled : xInsideScaled, yTopScaled, Math.abs(xOutsideScaled - xInsideScaled), Math.abs(yBottomScaled - yTopScaled), this._commonData.radius);
 
 			// draw border
-			ctx.fillStyle = this._data.borderColor;
-			ctx.fillRect(alignRight ? rightScaled - horzBorderScaled : 0, yTopScaled, horzBorderScaled, yBottomScaled - yTopScaled);
+			// ctx.fillStyle = this._data.borderColor;
+			// ctx.fillRect(alignRight ? rightScaled - horzBorderScaled : 0, yTopScaled, horzBorderScaled, yBottomScaled - yTopScaled);
 
 			if (this._data.tickVisible) {
 				ctx.fillStyle = this._commonData.color;

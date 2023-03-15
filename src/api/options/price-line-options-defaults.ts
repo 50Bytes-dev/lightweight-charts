@@ -8,5 +8,6 @@ export const priceLineOptionsDefaults: PriceLineOptions = {
 	lineWidth: 1,
 	lineVisible: true,
 	axisLabelVisible: true,
+	axisLabelBorderRadius: 0,
 	title: '',
 };

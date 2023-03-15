@@ -7,6 +7,15 @@ export interface LinePlotRow extends PlotRow {
 	readonly background?: string;
 }
 
+export interface DominatingPlotRow extends PlotRow {
+	readonly topColor?: string;
+	readonly middleColor?: string;
+	readonly bottomColor?: string;
+	readonly background?: string;
+	readonly topBackground?: string;
+	readonly bottomBackground?: string;
+}
+
 export interface HistogramPlotRow extends PlotRow {
 	readonly color?: string;
 	readonly background?: string;
@@ -29,6 +38,7 @@ export interface SeriesPlotRowTypeAtTypeMap {
 	Area: PlotRow;
 	Baseline: PlotRow;
 	Line: LinePlotRow;
+	Dominating: DominatingPlotRow;
 	Histogram: HistogramPlotRow;
 }
 

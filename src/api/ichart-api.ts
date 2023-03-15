@@ -7,7 +7,7 @@ import {
 	AreaSeriesPartialOptions,
 	BarSeriesPartialOptions,
 	BaselineSeriesPartialOptions,
-	CandlestickSeriesPartialOptions,
+	CandlestickSeriesPartialOptions, DominatingSeriesPartialOptions,
 	HistogramSeriesPartialOptions,
 	LineSeriesPartialOptions,
 	SeriesType,
@@ -82,6 +82,7 @@ export interface ISize {
 	width: number;
 	height: number;
 }
+
 /**
  * The main interface of a single chart.
  */
@@ -173,6 +174,18 @@ export interface IChartApi {
 	addLineSeries(lineOptions?: LineSeriesPartialOptions): ISeriesApi<'Line'>;
 
 	/**
+	 * Creates a line series with specified parameters.
+	 *
+	 * @param dominatingOptions - Customization parameters of the series being created.
+	 * @returns An interface of the created series.
+	 * @example
+	 * ```js
+	 * const series = chart.addDominatingSeries();
+	 * ```
+	 */
+	addDominatingSeries(dominatingOptions?: DominatingSeriesPartialOptions): ISeriesApi<'Dominating'>;
+
+	/**
 	 * Removes a series of any type. This is an irreversible operation, you cannot do anything with the series after removing it.
 	 *
 	 * @example
@@ -212,9 +225,32 @@ export interface IChartApi {
 	 */
 	unsubscribeClick(handler: MouseEventHandler): void;
 
+	/**
+	 * Subscribe to the chart mousedown event.
+	 *
+	 * @param handler - Previously subscribed handler
+	 */
 	subscribeMouseDown(handler: MouseEventHandler): void;
+
+	/**
+	 * Unsubscribe a handler that was previously subscribed using {@link subscribeMouseDown}.
+	 *
+	 * @param handler - Previously subscribed handler
+	 */
 	unsubscribeMouseDown(handler: MouseEventHandler): void;
+
+	/**
+	 * Subscribe to the chart mouseup event.
+	 *
+	 * @param handler - Previously subscribed handler
+	 */
 	subscribeMouseUp(handler: MouseEventHandler): void;
+
+	/**
+	 * Unsubscribe a handler that was previously subscribed using {@link subscribeMouseUp}.
+	 *
+	 * @param handler - Previously subscribed handler
+	 */
 	unsubscribeMouseUp(handler: MouseEventHandler): void;
 
 	/**

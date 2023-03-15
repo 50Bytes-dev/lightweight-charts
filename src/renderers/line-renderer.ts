@@ -80,7 +80,6 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 		if (items.length === 0 || visibleRange === null) {
 			return;
 		}
-		// console.log('test 1', items);
 		ctx.beginPath();
 
 		const firstItem = items[visibleRange.from];
@@ -132,7 +131,7 @@ export class PaneRendererLine extends PaneRendererLineBase<PaneRendererLineData>
 				ctx.stroke();
 				ctx.beginPath();
 				changeFillColor(currItem.background);
-				ctx.fillRect(currItem.x, 0, nextItem.x - currItem.x, window.innerHeight);
+				ctx.fillRect(currItem.x, 0, Math.abs(nextItem.x - currItem.x), window.innerHeight);
 			}
 
 			if (lineType !== LineType.WithSteps && currentStrokeStyle !== prevStrokeStyle) {

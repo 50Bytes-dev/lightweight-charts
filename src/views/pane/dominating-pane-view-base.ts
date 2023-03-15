@@ -14,9 +14,9 @@ import { BarCandlestickItemBase } from '../../renderers/bars-renderer';
 
 import { SeriesPaneViewBase } from './series-pane-view-base';
 
-export abstract class BarsPaneViewBase<TSeriesType extends 'Bar' | 'Candlestick' | 'Dominating', ItemType extends BarCandlestickItemBase> extends SeriesPaneViewBase<TSeriesType, ItemType> {
+export abstract class DominatingPaneViewBase<TSeriesType extends 'Dominating', ItemType extends BarCandlestickItemBase> extends SeriesPaneViewBase<TSeriesType, ItemType> {
 	public constructor(series: Series<TSeriesType>, model: ChartModel) {
-		super(series, model, false);
+		super(series, model, true);
 	}
 
 	protected _convertToCoordinates(priceScale: PriceScale, timeScale: TimeScale, firstValue: number): void {
@@ -24,9 +24,9 @@ export abstract class BarsPaneViewBase<TSeriesType extends 'Bar' | 'Candlestick'
 		priceScale.barPricesToCoordinates(this._items, firstValue, undefinedIfNull(this._itemsVisibleRange));
 	}
 
-	protected abstract _createRawItem(time: TimePointIndex, bar: SeriesPlotRow, colorer: SeriesBarColorer): ItemType;
+	protected abstract _createRawItem(time: TimePointIndex, price: SeriesPlotRow, colorer: SeriesBarColorer): ItemType;
 
-	protected _createDefaultItem(time: TimePointIndex, bar: SeriesPlotRow, colorer: SeriesBarColorer): BarCandlestickItemBase {
+	protected _createDefaultItem(time: TimePointIndex, bar: SeriesPlotRow): BarCandlestickItemBase {
 		return {
 			time: time,
 			open: bar.value[PlotRowValueIndex.Open] as BarPrice,

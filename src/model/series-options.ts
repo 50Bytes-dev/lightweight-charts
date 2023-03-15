@@ -209,6 +209,148 @@ export interface LineStyleOptions {
 }
 
 /**
+ * Represents style options for a line series.
+ */
+export interface DominatingStyleOptions {
+	/**
+	 * Color of the top part of the area
+	 *
+	 * @defaultValue `'#2196f3'`
+	 */
+	topColor: string;
+
+	/**
+	 * Color of the middle part of the area.
+	 *
+	 * @defaultValue `'rgba( 40, 221, 100, 0)'`
+	 */
+	middleColor: string;
+
+	/**
+	 * Color of the bottom part of the area
+	 *
+	 * @defaultValue `'#2196f3'`
+	 */
+	bottomColor: string;
+
+	/**
+	 * Background color between top and middle lines.
+	 *
+	 * @defaultValue `'transparent'`
+	 */
+	topBackground: string | string[];
+
+	/**
+	 * Background color between middle and bottom lines.
+	 *
+	 * @defaultValue `'transparent'`
+	 */
+	bottomBackground: string | string[];
+
+	/**
+	 * Line background color.
+	 *
+	 * @defaultValue `'transparent'`
+	 */
+	background: string;
+
+	/**
+	 * Line style.
+	 *
+	 * @defaultValue {@link LineStyle.Solid}
+	 */
+	topLineStyle: LineStyle;
+
+	/**
+	 * Line width in pixels.
+	 *
+	 * @defaultValue `3`
+	 */
+	topLineWidth: LineWidth;
+
+	/**
+	 * Line type.
+	 *
+	 * @defaultValue {@link LineType.Simple}
+	 */
+	topLineType: LineType;
+
+	/**
+	 * Line style.
+	 *
+	 * @defaultValue {@link LineStyle.Solid}
+	 */
+	middleLineStyle: LineStyle;
+
+	/**
+	 * Line width in pixels.
+	 *
+	 * @defaultValue `3`
+	 */
+	middleLineWidth: LineWidth;
+
+	/**
+	 * Line type.
+	 *
+	 * @defaultValue {@link LineType.Simple}
+	 */
+	middleLineType: LineType;
+
+	/**
+	 * Line style.
+	 *
+	 * @defaultValue {@link LineStyle.Solid}
+	 */
+	bottomLineStyle: LineStyle;
+
+	/**
+	 * Line width in pixels.
+	 *
+	 * @defaultValue `3`
+	 */
+	bottomLineWidth: LineWidth;
+
+	/**
+	 * Line type.
+	 *
+	 * @defaultValue {@link LineType.Simple}
+	 */
+	bottomLineType: LineType;
+
+	/**
+	 * Show the crosshair marker.
+	 *
+	 * @defaultValue `true`
+	 */
+	crosshairMarkerVisible: boolean;
+	/**
+	 * Crosshair marker radius in pixels.
+	 *
+	 * @defaultValue `4`
+	 */
+	crosshairMarkerRadius: number;
+	/**
+	 * Crosshair marker border color. An empty string falls back to the the color of the series under the crosshair.
+	 *
+	 * @defaultValue `''`
+	 */
+	crosshairMarkerBorderColor: string;
+	/**
+	 * The crosshair marker background color. An empty string falls back to the the color of the series under the crosshair.
+	 *
+	 * @defaultValue `''`
+	 */
+	crosshairMarkerBackgroundColor: string;
+
+	/**
+	 * Last price animation mode.
+	 *
+	 * @defaultValue {@link LastPriceAnimationMode.Disabled}
+	 */
+	lastPriceAnimation: LastPriceAnimationMode;
+}
+
+/**
  * Represents style options for an area series.
  */
 export interface AreaStyleOptions {
@@ -789,6 +931,15 @@ export type LineSeriesOptions = SeriesOptions<LineStyleOptions>;
 export type LineSeriesPartialOptions = SeriesPartialOptions<LineStyleOptions>;
 
 /**
+ * Represents line series options.
+ */
+export type DominatingSeriesOptions = SeriesOptions<DominatingStyleOptions>;
+/**
+ * Represents line series options where all properties are optional.
+ */
+export type DominatingSeriesPartialOptions = SeriesPartialOptions<DominatingStyleOptions>;
+
+/**
  * Represents the type of options for each series type.
  *
  * For example a bar series has options represented by {@link BarSeriesOptions}.
@@ -814,6 +965,10 @@ export interface SeriesOptionsMap {
 	 * The type of line series options.
 	 */
 	Line: LineSeriesOptions;
+	/**
+	 * The type of line series options.
+	 */
+	Dominating: DominatingSeriesOptions;
 	/**
 	 * The type of histogram series options.
 	 */
@@ -846,6 +1001,10 @@ export interface SeriesPartialOptionsMap {
 	 * The type of line series partial options.
 	 */
 	Line: LineSeriesPartialOptions;
+	/**
+	 * The type of line series partial options.
+	 */
+	Dominating: DominatingSeriesPartialOptions;
 	/**
 	 * The type of histogram series partial options.
 	 */

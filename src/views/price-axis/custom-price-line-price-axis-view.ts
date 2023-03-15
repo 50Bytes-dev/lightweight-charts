@@ -56,6 +56,7 @@ export class CustomPriceLinePriceAxisView extends PriceAxisView {
 		commonData.background = colors.background;
 		commonData.color = colors.foreground;
 		commonData.coordinate = y;
+		// commonData.radius = options.axisLabelBorderRadius;
 	}
 
 	private _formatPrice(price: number): string {

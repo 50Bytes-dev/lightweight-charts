@@ -148,6 +148,11 @@ export interface PriceScaleOptions {
 	borderColor: string;
 
 	/**
+	 * Price scale label radius.
+	 */
+	labelBorderRadius: number;
+
+	/**
 	 * Show top and bottom corner labels only if entire text is visible.
 	 *
 	 * @defaultValue `false`

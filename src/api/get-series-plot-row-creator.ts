@@ -3,7 +3,15 @@ import { SeriesPlotRow } from '../model/series-data';
 import { SeriesType } from '../model/series-options';
 import { OriginalTime, TimePoint, TimePointIndex } from '../model/time-data';
 
-import { BarData, CandlestickData, HistogramData, isWhitespaceData, LineData, SeriesDataItemTypeMap } from './data-consumer';
+import {
+	BarData,
+	CandlestickData,
+	DominatingData,
+	HistogramData,
+	isWhitespaceData,
+	LineData,
+	SeriesDataItemTypeMap
+} from './data-consumer';
 
 function getLineBasedSeriesPlotRow(time: TimePoint, index: TimePointIndex, item: LineData | HistogramData, originalTime: OriginalTime): Mutable<SeriesPlotRow<'Area' | 'Baseline'>> {
 	const val = item.value;
@@ -64,6 +72,48 @@ function getCandlestickSeriesPlotRow(time: TimePoint, index: TimePointIndex, ite
 	return res;
 }
 
+function getDominatingSeriesPlotRow(time: TimePoint, index: TimePointIndex, item: DominatingData, originalTime: OriginalTime): Mutable<SeriesPlotRow<'Dominating'>> {
+	const res: Mutable<SeriesPlotRow<'Dominating'>> = { index, time, value: [0, item.high, item.low, item.close], originalTime };
+
+	// 'topColor' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('topColor' in item && item.topColor !== undefined) {
+		res.topColor = item.topColor;
+	}
+
+	// 'middleColor' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('middleColor' in item && item.middleColor !== undefined) {
+		res.middleColor = item.middleColor;
+	}
+
+	// 'bottomColor' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('bottomColor' in item && item.bottomColor !== undefined) {
+		res.bottomColor = item.bottomColor;
+	}
+
+	// 'background' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('background' in item && item.background !== undefined) {
+		res.background = item.background;
+	}
+
+	// 'topBackground' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('topBackground' in item && item.topBackground !== undefined) {
+		res.topBackground = item.topBackground;
+	}
+
+	// 'bottomBackground' here is public property (from API) so we can use `in` here safely
+	// eslint-disable-next-line no-restricted-syntax
+	if ('bottomBackground' in item && item.bottomBackground !== undefined) {
+		res.bottomBackground = item.bottomBackground;
+	}
+
+	return res;
+}
+
 export type WhitespacePlotRow = Omit<PlotRow, 'value'>;
 
 export function isSeriesPlotRow(row: SeriesPlotRow | WhitespacePlotRow): row is SeriesPlotRow {
@@ -97,6 +147,7 @@ const seriesPlotRowFnMap: SeriesItemValueFnMap = {
 	Baseline: wrapWhitespaceData(getLineBasedSeriesPlotRow),
 	Histogram: wrapWhitespaceData(getColoredLineBasedSeriesPlotRow),
 	Line: wrapWhitespaceData(getColoredLineBasedSeriesPlotRow),
+	Dominating: wrapWhitespaceData(getDominatingSeriesPlotRow),
 };
 
 export function getSeriesPlotRowCreator(seriesType: SeriesType): TimedSeriesItemValueFn {
