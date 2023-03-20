@@ -113,6 +113,16 @@ export interface PaneRendererDominatingData extends PaneRendererDominatingDataBa
 	bottomBackground: string | string[];
 }
 
+interface VectorPoint {
+	x: number;
+	y: number;
+}
+
+interface Vector {
+	start: VectorPoint;
+	end: VectorPoint;
+}
+
 export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRendererDominatingData> {
 	/**
 	 * Similar to {@link walkLine}, but supports color changes
@@ -136,8 +146,24 @@ export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRende
 			}
 
 			const currItem = items[i];
+			const prevItem = items[i - 1];
 
 			if (currItem) {
+				if (prevItem) {
+					const intersection = this.vectorIntersection(
+						{
+							start: { x: prevItem.x, y: prevItem.highY },
+							end: { x: currItem.x, y: currItem.highY },
+						},
+						{
+							start: { x: prevItem.x, y: prevItem.closeY },
+							end: { x: currItem.x, y: currItem.closeY },
+						}
+					);
+					if (intersection) {
+						ctx.lineTo(intersection.x, intersection.y);
+					}
+				}
 				if (currItem.highY < currItem.closeY) {
 					ctx.lineTo(currItem.x, currItem.highY);
 				} else {
@@ -174,8 +200,24 @@ export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRende
 			}
 
 			const currItem = items[i];
+			const prevItem = items[i - 1];
 
 			if (currItem) {
+				if (prevItem) {
+					const intersection = this.vectorIntersection(
+						{
+							start: { x: prevItem.x, y: prevItem.highY },
+							end: { x: currItem.x, y: currItem.highY },
+						},
+						{
+							start: { x: prevItem.x, y: prevItem.closeY },
+							end: { x: currItem.x, y: currItem.closeY },
+						}
+					);
+					if (intersection) {
+						ctx.lineTo(intersection.x, intersection.y);
+					}
+				}
 				if (currItem.highY > currItem.closeY) {
 					ctx.lineTo(currItem.x, currItem.highY);
 				} else {
@@ -204,6 +246,35 @@ export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRende
 		ctx.closePath();
 	}
 
+	// eslint-disable-next-line @typescript-eslint/naming-convention
+	protected vectorIntersection(vector1: Vector, vector2: Vector): VectorPoint | null {
+		const x1 = vector1.start.x;
+		const y1 = vector1.start.y;
+		const x2 = vector1.end.x;
+		const y2 = vector1.end.y;
+		const x3 = vector2.start.x;
+		const y3 = vector2.start.y;
+		const x4 = vector2.end.x;
+		const y4 = vector2.end.y;
+
+		const denom = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+		if (denom === 0) {
+			return null;
+		}
+
+		const t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denom;
+		const u = -((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denom;
+
+		if (t > 0 && t < 1 && u > 0 && u < 1) {
+			return {
+				x: x1 + t * (x2 - x1),
+				y: y1 + t * (y2 - y1),
+			};
+		}
+		return null;
+	}
+
 	protected override _drawTopLine(ctx: CanvasRenderingContext2D, data: PaneRendererDominatingData): void {
 		const { items, visibleRange } = data;
 		if (items.length === 0 || visibleRange === null) {
@@ -219,9 +290,26 @@ export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRende
 				continue;
 			}
 
+			// const nextItem = items[i + 1];
 			const currItem = items[i];
+			const prevItem = items[i - 1];
 
 			if (currItem) {
+				if (prevItem) {
+					const intersection = this.vectorIntersection(
+						{
+							start: { x: prevItem.x, y: prevItem.highY },
+							end: { x: currItem.x, y: currItem.highY },
+						},
+						{
+							start: { x: prevItem.x, y: prevItem.closeY },
+							end: { x: currItem.x, y: currItem.closeY },
+						}
+					);
+					if (intersection) {
+						ctx.lineTo(intersection.x, intersection.y);
+					}
+				}
 				if (currItem.highY < currItem.closeY) {
 					ctx.lineTo(currItem.x, currItem.highY);
 				} else {
@@ -283,17 +371,23 @@ export class PaneRendererDominating extends PaneRendererDominatingBase<PaneRende
 			const prevItem = items[i - 1];
 
 			if (currItem) {
+				if (prevItem) {
+					const intersection = this.vectorIntersection(
+						{
+							start: { x: prevItem.x, y: prevItem.highY },
+							end: { x: currItem.x, y: currItem.highY },
+						},
+						{
+							start: { x: prevItem.x, y: prevItem.closeY },
+							end: { x: currItem.x, y: currItem.closeY },
+						}
+					);
+					if (intersection) {
+						ctx.lineTo(intersection.x, intersection.y);
+					}
+				}
 				if (currItem.highY > currItem.closeY) {
 					ctx.lineTo(currItem.x, currItem.highY);
-				} else if (prevItem?.highY > prevItem?.closeY) {
-					/* const m1 = (prevItem.highY - currItem.highY) / (prevItem.x - currItem.x);
-					const m2 = (prevItem.closeY - currItem.closeY) / (prevItem.x - currItem.x);
-
-					const b1 = currItem.highY;
-					const b2 = currItem.closeY;
-
-					ctx.lineTo((currItem.x + prevItem.x) / 2, (currItem.highY + prevItem.highY) / 2);*/
-					ctx.lineTo(currItem.x, currItem.closeY);
 				} else {
 					ctx.lineTo(currItem.x, currItem.closeY);
 				}
